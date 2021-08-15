@@ -18,21 +18,21 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.Collections;
 import java.util.List;
 
+import ca.frozen.library.BuildConfig;
 import ca.frozen.library.classes.Log;
-import ca.frozen.rpicameraviewer.BuildConfig;
+import ca.frozen.rpicameraviewer.R;
 import ca.frozen.rpicameraviewer.classes.Camera;
 import ca.frozen.rpicameraviewer.classes.CameraAdapter;
 import ca.frozen.rpicameraviewer.classes.Utils;
-import ca.frozen.rpicameraviewer.R;
 
 public class MainActivity extends AppCompatActivity
 {
