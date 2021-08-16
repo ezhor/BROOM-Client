@@ -3,6 +3,7 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -16,7 +17,7 @@
         android:id="@+id/video_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
+        android:layout_gravity="bottom|start"
         android:padding="5dp"
         android:textColor="@color/accent"
         android:textSize="32sp" />
@@ -33,16 +34,51 @@
         android:id="@+id/video_close"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_gravity="top|right"
+        android:layout_gravity="top|end"
         android:layout_margin="5dp"
-        android:background="@drawable/close_button" />
+        android:background="@drawable/close_button"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
         android:id="@+id/video_snapshot"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="5dp"
-        android:background="@drawable/snapshot_button" />
+        android:layout_gravity="start|center"
+        android:background="@drawable/snapshot_button"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ProgressBar
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        style="?android:progressBarStyleHorizontal"
+        android:progress="100"
+        android:rotation="180"
+        android:max="200"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="-50dp"
+        android:layout_marginEnd="50dp"
+        android:progressDrawable="@drawable/circle_red"/>
+
+    <ProgressBar
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        style="?android:progressBarStyleHorizontal"
+        android:progress="40"
+        android:rotation="180"
+        android:max="200"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="-50dp"
+        android:layout_marginEnd="50dp"
+        android:progressDrawable="@drawable/circle_green"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:text="50"
+        android:textSize="50dp"
+        android:textColor="@color/button_text"
+        android:layout_marginEnd="95dp"
+        />
 
 </FrameLayout>

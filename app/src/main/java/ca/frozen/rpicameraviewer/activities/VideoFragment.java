@@ -41,9 +41,13 @@ import ca.frozen.rpicameraviewer.classes.Camera;
 import ca.frozen.rpicameraviewer.classes.SpsParser;
 import ca.frozen.rpicameraviewer.classes.TcpIpReader;
 import ca.frozen.rpicameraviewer.classes.Utils;
+import es.arensis.BroomStatus;
+import es.arensis.ControlThread;
 
 public class VideoFragment extends Fragment implements TextureView.SurfaceTextureListener
 {
+	private ControlThread controlThread;
+
 	// public interfaces
 	public interface OnFadeListener
 	{
@@ -66,7 +70,7 @@ public class VideoFragment extends Fragment implements TextureView.SurfaceTextur
 	// instance variables
 	private Camera camera;
 	private boolean fullScreen;
-	private DecoderThread decoder;
+	private DecoderThread decoderThread;
 	private ZoomPanTextureView textureView;
 	private TextView nameView, messageView;
 	private Button closeButton, snapshotButton;
@@ -167,7 +171,7 @@ public class VideoFragment extends Fragment implements TextureView.SurfaceTextur
 			@Override
 			public void run()
 			{
-				MediaFormat format = decoder.getMediaFormat();
+				MediaFormat format = decoderThread.getMediaFormat();
 				int videoWidth = format.getInteger(MediaFormat.KEY_WIDTH);
 				int videoHeight = format.getInteger(MediaFormat.KEY_HEIGHT);
 				textureView.setVideoSize(videoWidth, videoHeight);
@@ -335,11 +339,15 @@ public class VideoFragment extends Fragment implements TextureView.SurfaceTextur
 	@Override
 	public void onStart()
 	{
+		BroomStatus broomStatus = new BroomStatus();
+
 		super.onStart();
 
-		// create the decoder thread
-		decoder = new DecoderThread();
-		decoder.start();
+		decoderThread = new DecoderThread();
+		decoderThread.start();
+
+		controlThread = new ControlThread(camera.address, broomStatus);
+		controlThread.start();
 	}
 
 	//******************************************************************************
@@ -350,10 +358,16 @@ public class VideoFragment extends Fragment implements TextureView.SurfaceTextur
 	{
 		super.onStop();
 
-		if (decoder != null)
+		if (decoderThread != null)
 		{
-			decoder.interrupt();
-			decoder = null;
+			decoderThread.interrupt();
+			decoderThread = null;
+		}
+
+		if (controlThread != null)
+		{
+			controlThread.setActive(false);
+			controlThread = null;
 		}
 	}
 
@@ -386,9 +400,9 @@ public class VideoFragment extends Fragment implements TextureView.SurfaceTextur
 	@Override
 	public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height)
 	{
-		if (decoder != null)
+		if (decoderThread != null)
 		{
-			decoder.setSurface(new Surface(surfaceTexture), startVideoHandler, startVideoRunner);
+			decoderThread.setSurface(new Surface(surfaceTexture), startVideoHandler, startVideoRunner);
 		}
 	}
 
@@ -406,9 +420,9 @@ public class VideoFragment extends Fragment implements TextureView.SurfaceTextur
 	@Override
 	public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture)
 	{
-		if (decoder != null)
+		if (decoderThread != null)
 		{
-			decoder.setSurface(null, null, null);
+			decoderThread.setSurface(null, null, null);
 		}
 		return true;
 	}
@@ -514,18 +528,18 @@ public class VideoFragment extends Fragment implements TextureView.SurfaceTextur
 	//******************************************************************************
 	public void stop()
 	{
-		if (decoder != null)
+		if (decoderThread != null)
 		{
 			messageView.setText(R.string.closing_video);
 			messageView.setTextColor(App.getClr(R.color.good_text));
 			messageView.setVisibility(View.VISIBLE);
-			decoder.interrupt();
+			decoderThread.interrupt();
 			try
 			{
-				decoder.join(TcpIpReader.IO_TIMEOUT * 2);
+				decoderThread.join(TcpIpReader.IO_TIMEOUT * 2);
 			}
 			catch (Exception ex) {}
-			decoder = null;
+			decoderThread = null;
 		}
 	}
 
