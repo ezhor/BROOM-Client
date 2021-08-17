@@ -4,6 +4,8 @@ package ca.frozen.rpicameraviewer.activities;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -11,6 +13,7 @@ import ca.frozen.library.classes.Log;
 import ca.frozen.rpicameraviewer.classes.Camera;
 import ca.frozen.rpicameraviewer.classes.Utils;
 import ca.frozen.rpicameraviewer.R;
+import es.arensis.BroomStatus;
 
 public class VideoActivity extends AppCompatActivity implements VideoFragment.OnFadeListener
 {
@@ -96,5 +99,26 @@ public class VideoActivity extends AppCompatActivity implements VideoFragment.On
 	{
 		videoFragment.stop();
 		super.onBackPressed();
+	}
+
+	@Override
+	public boolean dispatchGenericMotionEvent(MotionEvent motionEvent){
+		int speed = (int) (motionEvent.getAxisValue(MotionEvent.AXIS_GAS) * 100);
+		if(speed > 0){
+			BroomStatus.getInstance().setMotorPower(speed);
+		}else{
+			speed = (int) (motionEvent.getAxisValue(MotionEvent.AXIS_BRAKE) * -100);
+		}
+		BroomStatus.getInstance().setMotorPower(speed);
+		return true;
+	}
+
+	@Override
+	public boolean dispatchKeyEvent(KeyEvent keyEvent){
+
+		if(keyEvent.getKeyCode() == KeyEvent.KEYCODE_BUTTON_Y){
+			BroomStatus.getInstance().setLed(!BroomStatus.getInstance().isLed());
+		}
+		return true;
 	}
 }

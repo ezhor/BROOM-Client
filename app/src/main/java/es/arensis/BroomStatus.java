@@ -3,12 +3,20 @@ package es.arensis;
 import java.util.Locale;
 
 public class BroomStatus {
+    private static BroomStatus instance;
     private int motorPower;
     private int steering;
     private boolean boost;
     private int cameraRotationX;
     private int cameraRotationY;
     private boolean led;
+
+    public static BroomStatus getInstance() {
+        if(instance == null){
+            instance = new BroomStatus();
+        }
+        return instance;
+    }
 
     public int getMotorPower() {
         return motorPower;

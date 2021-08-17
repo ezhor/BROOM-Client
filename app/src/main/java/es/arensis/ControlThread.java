@@ -17,12 +17,10 @@ public class ControlThread extends Thread {
     private static final int DELAY = 50;
 
     private final String ip;
-    private final BroomStatus broomStatus;
     private boolean active = true;
 
-    public ControlThread(String ip, BroomStatus broomStatus) {
+    public ControlThread(String ip) {
         this.ip = ip;
-        this.broomStatus = broomStatus;
     }
 
     public void setActive(boolean active) {
@@ -37,8 +35,8 @@ public class ControlThread extends Thread {
             OutputStream outputStream = socket.getOutputStream();
 
             while (active) {
-                outputStream.write(broomStatus.toString().concat("\n").getBytes());
-                Log.e("asd", broomStatus.toString().concat("\n"));
+                outputStream.write(BroomStatus.getInstance().toString().concat("\n").getBytes());
+                Log.e("asd", BroomStatus.getInstance().toString().concat("\n"));
                 Thread.sleep(DELAY);
             }
             socket.close();

@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.Surface;
@@ -339,14 +340,12 @@ public class VideoFragment extends Fragment implements TextureView.SurfaceTextur
 	@Override
 	public void onStart()
 	{
-		BroomStatus broomStatus = new BroomStatus();
-
 		super.onStart();
 
 		decoderThread = new DecoderThread();
 		decoderThread.start();
 
-		controlThread = new ControlThread(camera.address, broomStatus);
+		controlThread = new ControlThread(camera.address);
 		controlThread.start();
 	}
 
