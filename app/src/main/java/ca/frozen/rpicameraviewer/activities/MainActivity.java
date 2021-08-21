@@ -227,10 +227,6 @@ public class MainActivity extends AppCompatActivity
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu)
 	{
-		// disable Delete All if there are no cameras
-		MenuItem item = menu.findItem(R.id.action_delete_all);
-		item.setEnabled(adapter.getCameras().size() != 0);
-
 		// set the network name
 		if (!set_network)
 		{
@@ -293,47 +289,6 @@ public class MainActivity extends AppCompatActivity
 			return true;
 		}
 
-		// delete all the cameras
-		else if (id == R.id.action_delete_all)
-		{
-			Log.info("menu: delete all");
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-			alert.setMessage(R.string.ok_to_delete_all_cameras);
-			alert.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
-			{
-				@Override
-				public void onClick(DialogInterface dialog, int which)
-				{
-					if (Utils.getSettings().showAllCameras)
-					{
-						Log.info("menu: deleting all cameras");
-						Utils.getCameras().clear();
-					}
-					else
-					{
-						Log.info("menu: deleting network cameras");
-						List<Camera> allCameras = Utils.getCameras();
-						for (Camera camera : adapter.getCameras())
-						{
-							allCameras.remove(camera);
-						}
-					}
-					updateCameras();
-					dialog.dismiss();
-				}
-			});
-			alert.setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
-			{
-				@Override
-				public void onClick(DialogInterface dialog, int which)
-				{
-					dialog.dismiss();
-				}
-			});
-
-			alert.show();
-		}
-
 		// edit the settings
 		else if (id == R.id.action_settings)
 		{
@@ -342,33 +297,6 @@ public class MainActivity extends AppCompatActivity
 			startActivity(intent);
 			return true;
 		}
-
-		// display the help information
-		else if (id == R.id.action_help)
-		{
-			Log.info("menu: help");
-			Intent intent = new Intent(this, HelpActivity.class);
-			startActivity(intent);
-			return true;
-		}
-
-		// display the log files
-		else if (id == R.id.action_log_files)
-		{
-			Log.info("menu: log files");
-			Intent intent = new Intent(this, LogFilesActivity.class);
-			startActivity(intent);
-			return true;
-		}
-
-		// display the about information
-        else if (id == R.id.action_about)
-        {
-			Log.info("menu: about");
-            Intent intent = new Intent(this, AboutActivity.class);
-            startActivity(intent);
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
 	}

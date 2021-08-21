@@ -13,7 +13,7 @@ import ca.frozen.library.classes.Log;
 import ca.frozen.rpicameraviewer.classes.Camera;
 import ca.frozen.rpicameraviewer.classes.Utils;
 import ca.frozen.rpicameraviewer.R;
-import es.arensis.BroomStatus;
+import es.arensis.broom.BroomStatus;
 
 public class VideoActivity extends AppCompatActivity implements VideoFragment.OnFadeListener
 {
@@ -103,11 +103,11 @@ public class VideoActivity extends AppCompatActivity implements VideoFragment.On
 
 	@Override
 	public boolean dispatchGenericMotionEvent(MotionEvent motionEvent){
-		int speed = (int) (motionEvent.getAxisValue(MotionEvent.AXIS_GAS) * 100);
+		byte speed = (byte) (motionEvent.getAxisValue(MotionEvent.AXIS_GAS) * 100);
 		if(speed > 0){
 			BroomStatus.getInstance().setMotorPower(speed);
 		}else{
-			speed = (int) (motionEvent.getAxisValue(MotionEvent.AXIS_BRAKE) * -100);
+			speed = (byte) (motionEvent.getAxisValue(MotionEvent.AXIS_BRAKE) * -100);
 		}
 		BroomStatus.getInstance().setMotorPower(speed);
 		return true;

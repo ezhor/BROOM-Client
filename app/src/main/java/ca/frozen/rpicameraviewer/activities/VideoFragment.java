@@ -16,7 +16,6 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.Surface;
@@ -42,8 +41,7 @@ import ca.frozen.rpicameraviewer.classes.Camera;
 import ca.frozen.rpicameraviewer.classes.SpsParser;
 import ca.frozen.rpicameraviewer.classes.TcpIpReader;
 import ca.frozen.rpicameraviewer.classes.Utils;
-import es.arensis.BroomStatus;
-import es.arensis.ControlThread;
+import es.arensis.broom.ControlThread;
 
 public class VideoFragment extends Fragment implements TextureView.SurfaceTextureListener
 {

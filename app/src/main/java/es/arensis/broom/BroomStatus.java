@@ -1,14 +1,11 @@
-package es.arensis;
-
-import java.util.Locale;
+package es.arensis.broom;
 
 public class BroomStatus {
     private static BroomStatus instance;
-    private int motorPower;
-    private int steering;
-    private boolean boost;
-    private int cameraRotationX;
-    private int cameraRotationY;
+    private byte motorPower;
+    private byte steering;
+    private byte cameraRotationX;
+    private byte cameraRotationY;
     private boolean led;
 
     public static BroomStatus getInstance() {
@@ -18,44 +15,36 @@ public class BroomStatus {
         return instance;
     }
 
-    public int getMotorPower() {
+    public byte getMotorPower() {
         return motorPower;
     }
 
-    public void setMotorPower(int motorPower) {
+    public void setMotorPower(byte motorPower) {
         this.motorPower = motorPower;
     }
 
-    public int getSteering() {
+    public byte getSteering() {
         return steering;
     }
 
-    public void setSteering(int steering) {
+    public void setSteering(byte steering) {
         this.steering = steering;
     }
 
-    public int getCameraRotationX() {
+    public byte getCameraRotationX() {
         return cameraRotationX;
     }
 
-    public void setCameraRotationX(int cameraRotationX) {
+    public void setCameraRotationX(byte cameraRotationX) {
         this.cameraRotationX = cameraRotationX;
     }
 
-    public int getCameraRotationY() {
+    public byte getCameraRotationY() {
         return cameraRotationY;
     }
 
-    public void setCameraRotationY(int cameraRotationY) {
+    public void setCameraRotationY(byte cameraRotationY) {
         this.cameraRotationY = cameraRotationY;
-    }
-
-    public boolean isBoost() {
-        return boost;
-    }
-
-    public void setBoost(boolean boost) {
-        this.boost = boost;
     }
 
     public boolean isLed() {
