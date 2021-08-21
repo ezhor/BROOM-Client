@@ -2,6 +2,7 @@ package es.arensis.broom;
 
 public class BroomStatus {
     private static BroomStatus instance;
+
     private byte motorPower;
     private byte steering;
     private byte cameraRotationX;
