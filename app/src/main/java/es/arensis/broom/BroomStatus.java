@@ -7,9 +7,20 @@ public class BroomStatus {
     private byte cameraRotationX;
     private byte cameraRotationY;
     private boolean led;
+    private int gear = 1;
+
+    private static final int MIN_GEAR = 1;
+    private static final int MAX_GEAR = 3;
+
+    private static final byte GEAR_1_MAX_SPEED = 20;
+    private static final byte GEAR_2_MAX_SPEED = 50;
+    private static final byte GEAR_3_MAX_SPEED = 100;
+
+    private BroomStatus() {
+    }
 
     public static BroomStatus getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new BroomStatus();
         }
         return instance;
@@ -55,6 +66,38 @@ public class BroomStatus {
         this.led = led;
     }
 
+    public int getGear() {
+        return gear;
+    }
+
+    public void decreaseGear() {
+        if (gear > MIN_GEAR) {
+            gear++;
+        }
+    }
+
+    public void increaseGear() {
+        if (gear < MAX_GEAR) {
+            gear++;
+        }
+    }
+
+    public byte maxSpeed() {
+        byte maxSpeed;
+        switch (gear) {
+            case 1:
+            default:
+                maxSpeed = GEAR_1_MAX_SPEED;
+                break;
+            case 2:
+                maxSpeed = GEAR_2_MAX_SPEED;
+                break;
+            case 3:
+                maxSpeed = GEAR_3_MAX_SPEED;
+        }
+        return maxSpeed;
+    }
+
     @Override
     public String toString() {
         return format(motorPower)
@@ -64,7 +107,18 @@ public class BroomStatus {
                 + (led ? "1" : "0");
     }
 
-    private String format(int number){
+    public byte[] toBytes() {
+        return new byte[]{
+                motorPower,
+                steering,
+                cameraRotationX,
+                cameraRotationY,
+                (byte) (led ? 1 : 0),
+                '\n'
+        };
+    }
+
+    private String format(int number) {
         return String.format("%04d", number);
     }
 }

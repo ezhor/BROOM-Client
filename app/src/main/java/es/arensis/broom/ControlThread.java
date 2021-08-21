@@ -30,8 +30,8 @@ public class ControlThread extends Thread {
             OutputStream outputStream = socket.getOutputStream();
 
             while (active) {
-                outputStream.write(BroomStatus.getInstance().toString().concat("\n").getBytes());
-                Log.e("asd", BroomStatus.getInstance().toString().concat("\n"));
+                outputStream.write(BroomStatus.getInstance().toBytes());
+                Log.e("BroomStatus", BroomStatus.getInstance().toString());
                 Thread.sleep(DELAY);
             }
             socket.close();
