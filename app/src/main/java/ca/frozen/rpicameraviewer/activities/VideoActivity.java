@@ -62,6 +62,7 @@ public class VideoActivity extends AppCompatActivity implements VideoFragment.On
 
         // create the video fragment
         videoFragment = VideoFragment.newInstance(camera, true);
+        InputManager.getInstance().setBroomUI(videoFragment);
         FragmentTransaction fragTran = getSupportFragmentManager().beginTransaction();
         fragTran.add(R.id.video, videoFragment);
         fragTran.commit();

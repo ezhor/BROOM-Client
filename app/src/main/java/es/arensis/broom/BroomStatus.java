@@ -3,19 +3,19 @@ package es.arensis.broom;
 public class BroomStatus {
     private static BroomStatus instance;
 
-    private byte motorPower;
-    private byte steering;
-    private byte cameraRotationX;
-    private byte cameraRotationY;
+    private int motorPower;
+    private int steering;
+    private int cameraRotationX;
+    private int cameraRotationY;
     private boolean led;
     private int gear = 1;
 
     private static final int MIN_GEAR = 1;
     private static final int MAX_GEAR = 3;
 
-    private static final byte GEAR_1_MAX_SPEED = 20;
-    private static final byte GEAR_2_MAX_SPEED = 50;
-    private static final byte GEAR_3_MAX_SPEED = 100;
+    private static final int GEAR_1_MAX_SPEED = 20;
+    private static final int GEAR_2_MAX_SPEED = 50;
+    private static final int GEAR_3_MAX_SPEED = 100;
 
     private BroomStatus() {
     }
@@ -27,35 +27,35 @@ public class BroomStatus {
         return instance;
     }
 
-    public byte getMotorPower() {
+    public int getMotorPower() {
         return motorPower;
     }
 
-    public void setMotorPower(byte motorPower) {
+    public void setMotorPower(int motorPower) {
         this.motorPower = motorPower;
     }
 
-    public byte getSteering() {
+    public int getSteering() {
         return steering;
     }
 
-    public void setSteering(byte steering) {
+    public void setSteering(int steering) {
         this.steering = steering;
     }
 
-    public byte getCameraRotationX() {
+    public int getCameraRotationX() {
         return cameraRotationX;
     }
 
-    public void setCameraRotationX(byte cameraRotationX) {
+    public void setCameraRotationX(int cameraRotationX) {
         this.cameraRotationX = cameraRotationX;
     }
 
-    public byte getCameraRotationY() {
+    public int getCameraRotationY() {
         return cameraRotationY;
     }
 
-    public void setCameraRotationY(byte cameraRotationY) {
+    public void setCameraRotationY(int cameraRotationY) {
         this.cameraRotationY = cameraRotationY;
     }
 
@@ -73,18 +73,24 @@ public class BroomStatus {
 
     public void decreaseGear() {
         if (gear > MIN_GEAR) {
-            gear++;
+            gear--;
+            motorPower = maxSpeed(gear) * motorPower / maxSpeed(gear + 1);
         }
     }
 
     public void increaseGear() {
         if (gear < MAX_GEAR) {
             gear++;
+            motorPower = maxSpeed(gear) * motorPower / maxSpeed(gear - 1);
         }
     }
 
-    public byte maxSpeed() {
-        byte maxSpeed;
+    public int maxSpeed() {
+        return maxSpeed(gear);
+    }
+
+    private int maxSpeed(int gear) {
+        int maxSpeed;
         switch (gear) {
             case 1:
             default:
@@ -105,18 +111,8 @@ public class BroomStatus {
                 + format(steering)
                 + format(cameraRotationX)
                 + format(cameraRotationY)
-                + (led ? "1" : "0");
-    }
-
-    public byte[] toBytes() {
-        return new byte[]{
-                motorPower,
-                steering,
-                cameraRotationX,
-                cameraRotationY,
-                (byte) (led ? 1 : 0),
-                '\n'
-        };
+                + (led ? "1" : "0")
+                + "\n";
     }
 
     private String format(int number) {
