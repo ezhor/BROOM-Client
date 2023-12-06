@@ -4,13 +4,16 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 public class ControlThread extends Thread {
 
     private static final int PORT = 2727;
-    private static final int DELAY = 50;
+    private static final int DELAY = 20;
 
     private final String ip;
     private boolean active = true;
@@ -27,11 +30,14 @@ public class ControlThread extends Thread {
     public void run() {
 
         try {
-            Socket socket = new Socket(ip, PORT);
-            OutputStream outputStream = socket.getOutputStream();
+            InetAddress broomAddress = InetAddress.getByName(ip);
+            DatagramSocket datagramSocket = new DatagramSocket();
+            byte[] buffer;
 
             while (active) {
-                outputStream.write(BroomStatus.getInstance().toString().getBytes());
+                buffer = BroomStatus.getInstance().toString().getBytes();
+                datagramSocket.send(new DatagramPacket(buffer, buffer.length, broomAddress, PORT));
+
                 /*Log.e("BroomStatus",
                         BroomStatus.getInstance().toString().substring(0, 4)
                         + "|" + BroomStatus.getInstance().toString().substring(4, 8)
@@ -41,7 +47,7 @@ public class ControlThread extends Thread {
                 );*/
                 Thread.sleep(DELAY);
             }
-            socket.close();
+            datagramSocket.close();
 
         } catch (IOException | InterruptedException e) {
             Log.e("CONNECTION", e.toString());
